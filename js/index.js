@@ -7,6 +7,9 @@ let timer = null;
 let mario_img = new Image();
 mario_img.src= "../img/mario.png"; 
 
+let background_image = new Image;
+background_image.src = "../img/bg-1-1.png"
+
 
 
 //js 초기화
@@ -57,8 +60,8 @@ function timerProc(){
 console.log(`timerProc()호출`)
 
 //캐릭터 그리기호출
-drawCharacter();
 backgroundImage();
+drawCharacter();
 
 }
 
@@ -66,7 +69,7 @@ backgroundImage();
 //캐릭터그리기
 function drawCharacter(){
 console.log(`drawCharacter()호출`);
-canvse.drawImage(mario_img,0,0,500,500);
+canvse.drawImage(mario_img,100,100,500,500,0,0,100,500);
 }
 
 
@@ -77,11 +80,10 @@ function stopTimer(){
     console.log("stopTimer()호출")
     clearInterval(timer);
     timer=null;
-    mario_img.src="";
-    canvse.drawImage(mario_img,0,0);
 }
 
 //배경그리기
 function backgroundImage(){
-    canvse.drawImage();
+    console.log("backgroundImage()호출")
+    canvse.drawImage(background_image,100,100,100+900,100+400,0,0,100+400,100+400);
 }
