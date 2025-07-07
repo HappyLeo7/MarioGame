@@ -23,6 +23,7 @@ window.onload = function () {
     window.onkeydown = function (event) {
         keyState[event.code] = true;
     };
+
     window.onkeyup = function (event) {
         keyState[event.code] = false;
     };
@@ -32,6 +33,15 @@ window.onload = function () {
         if (keyState["ArrowLeft"]) scrollX -= 10;
         if (keyState["ArrowDown"]) scrollY += 10;
         if (keyState["ArrowUp"]) scrollY -= 10;
+
+        const maxScrollX = bg1_1.width-256;
+        const maxScrollY = bg1_1.height-240;
+
+        if (scrollX < 0) scrollX = 0;
+        if (scrollY < 0) scrollY = 0;
+        if (maxScrollX < scrollX) scrollX = maxScrollX;
+        if (maxScrollY < scrollY) scrollY = maxScrollY;
+
         drawimg();
     }, 1000 / 60);
 };
