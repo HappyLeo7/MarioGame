@@ -1,87 +1,44 @@
+const BOARD_WIDTH = 800;
+const BOARD_HEIGHT = 750;
+let ctx = null;
 
-const GAMEPAN_WIDTH = 1000;
-const GAMEPAN_HEIGHT = 600;
-let canvse = null;
-let timer = null;
+let scrollX = 0;
+let scrollY = 0;
 
-let mario_img = new Image();
-mario_img.src= "../img/mario.png"; 
+//img
 
+let mrlf_1 = new Image();
+mrlf_1.src = "../img/mrlf_1.png";
+let bg1_1 = new Image();
+bg1_1.src = "../img/bg1_1.png";
 
-
-//js 초기화
 window.onload = function () {
-    console.log("js 초기화");
-}
 
-//jquery 초기화
-$(document).ready(function () {
-    console.log("jquery 초기화")
-});
+    const myCanvas = document.getElementById("myCanvas");
+    ctx = myCanvas.getContext("2d");
 
-//jquery 약식 초기화
-//클릭 이벤트
-$(function () {
-    console.log("jquery약식");
-    $("#start").click(startGameTimer);
-    $("#stop").click(stopTimer);
-})
+    drawimg();
+    let keyState = {};
 
-//startGameTimer()
-function startGameTimer() {
-    console.log("startGameTimer()호출")
+    window.onkeydown = function (event) {
+        keyState[event.code] = true;
+    };
+    window.onkeyup = function (event) {
+        keyState[event.code] = false;
+    };
 
-    //가져올 canvas 태그 위치 찾기
-    const marioCanvas = document.getElementById("marioCanvas");
-    console.log(`marioCanvas:[${marioCanvas}]`);
+    setInterval(function () {
+        if (keyState["ArrowRight"]) scrollX += 10;
+        if (keyState["ArrowLeft"]) scrollX -= 10;
+        if (keyState["ArrowDown"]) scrollY += 10;
+        if (keyState["ArrowUp"]) scrollY -= 10;
+        drawimg();
+    }, 1000 / 60);
+};
 
+window.onkeydown
 
-    //그림도구 가져오기
-    canvse = marioCanvas.getContext("2d");
-    console.log(`canvse:[${canvse}]`);
-
-    //프레임 시작
-    startTimer();
-}
-
-//------------------------------------------
-//캐릭터 생성(반복 시간이들어감 프레임)
-function startTimer(){
-    if(timer==null){
-        timer= setInterval(timerProc,500)
-    }
-}
-
-//어떤걸 계속 그릴지
-function timerProc(){
-console.log(`timerProc()호출`)
-
-//캐릭터 그리기호출
-drawCharacter();
-backgroundImage();
-
-}
-
-
-//캐릭터그리기
-function drawCharacter(){
-console.log(`drawCharacter()호출`);
-canvse.drawImage(mario_img,0,0,500,500);
-}
-
-
-//-------------------------------------------
-
-//멈추기
-function stopTimer(){
-    console.log("stopTimer()호출")
-    clearInterval(timer);
-    timer=null;
-    mario_img.src="";
-    canvse.drawImage(mario_img,0,0);
-}
-
-//배경그리기
-function backgroundImage(){
-    canvse.drawImage();
-}
+function drawimg() {
+    ctx.clearRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+    ctx.drawImage(bg1_1, scrollX, scrollY, 256, 240, 0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+};
