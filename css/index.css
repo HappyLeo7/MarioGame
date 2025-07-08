@@ -3,8 +3,11 @@
 }
 
 #marioCanvas{
-    margin-top: 100px;
-    margin-left: 100px;
-    border : 1px solid green;
+    /* margin-top: 100px; */
+    /* margin-left: 100px; */
+    /* border : 1px solid green; */
     background-color: blue;
+}
+#box1{
+    text-align: center;
 }

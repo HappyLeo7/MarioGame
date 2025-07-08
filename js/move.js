@@ -13,7 +13,7 @@ let bg1_1 = new Image();
 bg1_1.src = "../img/bg1_1.png";
 
 window.onload = function () {
-
+    
     const myCanvas = document.getElementById("myCanvas");
     ctx = myCanvas.getContext("2d");
 
