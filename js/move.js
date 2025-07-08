@@ -15,12 +15,8 @@ bg1_1.src = "../img/bg1_1.png";
 //윈도우 실행 즉시
 
 window.onload = function () {
-<<<<<<< HEAD
-    
-=======
 
     //캔버스 호출
->>>>>>> 5edc316254b1d5a5dfe36b03229fc301864f0a40
     const myCanvas = document.getElementById("myCanvas");
     ctx = myCanvas.getContext("2d");
 
