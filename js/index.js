@@ -174,10 +174,13 @@ window.onkeydown = function (event) {
     //end : 마리오 이동
 
     //상자 좌표
-    if (box_1_y + 200 == mario_y && box_1_x == mario_x) {
-        console.log("1")
-        box_1_y -= 50;
-
+    console.log(`bBox_1:${bBox_1}`);
+    console.log(`box_1_y:${box_1_y}`);
+    console.log(`mario_y:${mario_y}`);
+    console.log(`box_1_x:${box_1_x}`);
+    console.log(`scrollX:${scrollX}`);
+    
+    if (box_1_y+50 > mario_y) {
         bBox_1 = true;
     }
     //end : 상자좌표
@@ -214,10 +217,10 @@ function drawCharacter() {
 
     //버섯캐릭터
     canvse.drawImage(gbw_1_img, gbw_1_x-scrollX*2, gbw_1_y, 50, 50)
-    console.log(`버섯 : ${gbw_1_x},${gbw_1_y}` );
-    console.log(`스크린 : ${scrollX},${scrollY}` );
-    console.log(`마리오 : ${mario_x},${mario_y}` );
-    console.log(`상자1 : ${box_1_x},${box_1_y}` );
+    // console.log(`버섯 : ${gbw_1_x},${gbw_1_y}` );
+    // console.log(`스크린 : ${scrollX},${scrollY}` );
+    // console.log(`마리오 : ${mario_x},${mario_y}` );
+    // console.log(`상자1 : ${box_1_x},${box_1_y}` );
 
     // canvse.drawImage(gbw_2_img,200,200,50,50)
 
