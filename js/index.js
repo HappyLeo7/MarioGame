@@ -1,5 +1,5 @@
 
-const BACKGROUND_WIDTH = 3120;
+const BACKGROUND_WIDTH = 3135;
 const GAMEPAN_WIDTH = 800;
 const GAMEPAN_HEIGHT = 750;
 let canvse = null;
@@ -10,7 +10,7 @@ let timer = null;
 let scrollX = 0;
 let scrollY = 0;
 
-//마리오
+//마리오 이미지
 let mario_img = new Image(); mario_img.src = "../img/mrlf_1.png"; //오른쪽멈춘이미지
 let mario_img2 = new Image(); mario_img2.src = "../img/mrlf_2.png"; //오른쪽이동이미지
 let mario_j_r = new Image(); mario_j_r.src = "../img/mrlf_j_r_1.png";//오른쪽 점프 이미지
@@ -34,8 +34,8 @@ let mario_h = 50;
 let box_1_img = new Image(); box_1_img.src = "../img/qblk_1.png";
 
 //상자 좌표
-let box_1_x = 200;
-let box_1_y = 360;
+let box_1_x = 800;
+let box_1_y = 450;
 let bBox_1 = false;
 
 
@@ -46,10 +46,11 @@ gbw_1_img.src = "../img/gbw_1.png" //버섯1
 let gbw_2_img = new Image();
 gbw_2_img.src = "../img/gbw_2.png" //버섯2
 
+//버섯좌표
+let gbw_1_x=400;
+let gbw_1_y=600;
 
-let bMove = false;
-let bLR = false;
-let bJump = false;
+
 
 //배경
 let background_image = new Image;
@@ -57,7 +58,10 @@ background_image.src = "../img/bg1_1.png"
 let bBackground_x = false;
 
 
-
+//동작 여부
+let bMove = false;
+let bLR = false;
+let bJump = false;
 
 
 
@@ -170,8 +174,9 @@ window.onkeydown = function (event) {
     //end : 마리오 이동
 
     //상자 좌표
-    if (box_1_y + 30 == mario_y && box_1_x == mario_x) {
-        box_1_y -= 30;
+    if (box_1_y + 200 == mario_y && box_1_x == mario_x) {
+        console.log("1")
+        box_1_y -= 50;
 
         bBox_1 = true;
     }
@@ -207,8 +212,15 @@ window.onkeydown = function (event) {
 function drawCharacter() {
     // console.log(`drawCharacter()호출`);
 
-    canvse.drawImage(gbw_1_img, 700, 470, 50, 50)
+    //버섯캐릭터
+    canvse.drawImage(gbw_1_img, gbw_1_x-scrollX*2, gbw_1_y, 50, 50)
+    console.log(`버섯 : ${gbw_1_x},${gbw_1_y}` );
+    console.log(`스크린 : ${scrollX},${scrollY}` );
+    console.log(`마리오 : ${mario_x},${mario_y}` );
+    console.log(`상자1 : ${box_1_x},${box_1_y}` );
+
     // canvse.drawImage(gbw_2_img,200,200,50,50)
+
 
 
     if (bMove == false && bLR == false && bJump == false) {
@@ -226,7 +238,6 @@ function drawCharacter() {
         canvse.drawImage(mario_L_img, mario_x, mario_y, mario_w, mario_h);
     }
     if (bMove == true && bLR == true && bJump == false) {
-
         //왼쪽 움직이는 마리오
         canvse.drawImage(mario_L_img2, mario_x, mario_y, mario_w, mario_h)
     }
@@ -235,15 +246,12 @@ function drawCharacter() {
     //점프했다가 떨어지는 마리오
     if (mario_y <= MARIO_Y_INITIAL - 1) {
         mario_y += 5;
-
-        // console.log(mario_y);
     }
     if (bJump == true) {
         mario_y -= 10;
         if (mario_y == MARIO_Y_INITIAL - 250) {
             bJump = false;
         }
-
     }
 
 
@@ -264,13 +272,15 @@ function drawCharacter() {
         }
     }
 
+
+
     //상자 이미지
     if (bBox_1 == false) {
-        canvse.drawImage(box_1_img, box_1_x, box_1_y, 40, 40);
+        canvse.drawImage(box_1_img, box_1_x-scrollX*3.13, box_1_y, 50, 50);
     }
     if (bBox_1 == true) {
 
-        if (box_1_y <= 359) {
+        if (box_1_y <= 350) {
             box_1_y += 1;
             console.log(box_1_y);
         }
@@ -278,7 +288,7 @@ function drawCharacter() {
             bBox_1 = false;
             console.log(box_1_y);
         }
-        canvse.drawImage(box_1_img, box_1_x, box_1_y, 40, 40);
+        canvse.drawImage(box_1_img, box_1_x-scrollX*3.13, box_1_y, 50, 50);
     }
 
 
@@ -305,7 +315,7 @@ function backgroundImage() {
     if (0 <= scrollX && scrollX < BACKGROUND_WIDTH) {
         console.log(scrollX)
         canvse.drawImage(background_image, scrollX, scrollY, 256, 240, 0, 0, GAMEPAN_WIDTH, GAMEPAN_HEIGHT);
-    } else if (scrollX > BACKGROUND_WIDTH) {
+    } else if (scrollX >= BACKGROUND_WIDTH) {
         console.log(scrollX)
         // bBackground_x=true;
         canvse.drawImage(background_image, BACKGROUND_WIDTH, scrollY, 256, 240, 0, 0, GAMEPAN_WIDTH, GAMEPAN_HEIGHT);
