@@ -40,14 +40,14 @@ let bBox_1 = false;
 
 
 
-//버섯몬스터
+//굼바
 let gbw_1_img = new Image();
-gbw_1_img.src = "../img/gbw_1.png" //버섯1
+gbw_1_img.src = "../img/gbw_1.png" //굼바1
 let gbw_2_img = new Image();
-gbw_2_img.src = "../img/gbw_2.png" //버섯2
+gbw_2_img.src = "../img/gbw_2.png" //굼바2
 
-//버섯좌표
-let gbw_1_x=400;
+//굼바좌표
+let gbw_1_x=1200;
 let gbw_1_y=600;
 
 
