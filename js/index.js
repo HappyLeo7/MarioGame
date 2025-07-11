@@ -46,9 +46,13 @@ gbw_1_img.src = "../img/gbw_1.png" //버섯1
 let gbw_2_img = new Image();
 gbw_2_img.src = "../img/gbw_2.png" //버섯2
 
-//버섯좌표
-let gbw_1_x=400;
-let gbw_1_y=600;
+//버섯1좌표
+let gbw_1_x = 400;
+let gbw_1_y = 600;
+
+//버섯2좌표
+let gbw_2_x = 400;
+let gbw_2_y = 600;
 
 
 
@@ -148,53 +152,32 @@ window.onkeydown = function (event) {
         }
     }
     if (event.code == "Space") {
-        if (mario_y < MARIO_Y_INITIAL + 1) {
-            console.log(mario_y);
-            if (mario_y == MARIO_Y_INITIAL) {
-                console.log(mario_y);
-                // mario_y -= 300;
-                console.log(mario_y);
-                bJump = true;
-            }
-
+        if (mario_y == MARIO_Y_INITIAL) {
+            bJump = true;
+            bBox_1 = true;
         }
     }
-    // if (event.code == "Space" && event.code == "ArrowRight") {
-    //     mario_x += 5;
-    //     mario_y -= 10;
-    // }
-    // if (event.code == "ArrowDown") {
-    //     if (mario_y >= (600)) {
 
-    //     } else {
-    //         mario_y += 5;
-
-    //     }
-    // }
     //end : 마리오 이동
 
+
+
     //상자 좌표
-    console.log(`bBox_1:${bBox_1}`);
-    console.log(`box_1_y:${box_1_y}`);
-    console.log(`mario_y:${mario_y}`);
-    console.log(`box_1_x:${box_1_x}`);
-    console.log(`scrollX:${scrollX}`);
-    
-    if (box_1_y+50 > mario_y) {
-        bBox_1 = true;
-    }
+
     //end : 상자좌표
+
+
 
     //스크린 좌표
     if (bBackground_x == false && 0 <= scrollX && scrollX < BACKGROUND_WIDTH) {
         if (event.code == "ArrowRight") { scrollX += 15; }
         if (event.code == "ArrowLeft") { scrollX -= 15; }
     }
-       //왼쪽 끝에 닿으면 멈춤
+    //왼쪽 끝에 닿으면 멈춤
     if (scrollX == -15) {
         if (event.code == "ArrowRight") { scrollX += 15; }
     }
-         //오른쪽 끝에 닿으면 멈춤
+    //오른쪽 끝에 닿으면 멈춤
     if (scrollX == BACKGROUND_WIDTH) {
         if (event.code == "ArrowLeft") { scrollX -= 15; }
     }
@@ -216,14 +199,11 @@ function drawCharacter() {
     // console.log(`drawCharacter()호출`);
 
     //버섯캐릭터
-    canvse.drawImage(gbw_1_img, gbw_1_x-scrollX*2, gbw_1_y, 50, 50)
-    // console.log(`버섯 : ${gbw_1_x},${gbw_1_y}` );
-    // console.log(`스크린 : ${scrollX},${scrollY}` );
-    // console.log(`마리오 : ${mario_x},${mario_y}` );
-    // console.log(`상자1 : ${box_1_x},${box_1_y}` );
+    canvse.drawImage(gbw_1_img, gbw_1_x - scrollX * 2, gbw_1_y, 50, 50)
+    if(bBox_1==1){
 
-    // canvse.drawImage(gbw_2_img,200,200,50,50)
-
+        canvse.drawImage(gbw_2_img, 800-scrollX*3.13,400,50,50)
+    }
 
 
     if (bMove == false && bLR == false && bJump == false) {
@@ -252,9 +232,9 @@ function drawCharacter() {
     }
     if (bJump == true) {
         mario_y -= 10;
-        if (mario_y == MARIO_Y_INITIAL - 250) {
+        if (mario_y == MARIO_Y_INITIAL - 100 && scrollX == 190) {
             bJump = false;
-        }
+        } else if (mario_y == MARIO_Y_INITIAL - 200) { bJump = false; }
     }
 
 
@@ -278,21 +258,20 @@ function drawCharacter() {
 
 
     //상자 이미지
+    console.log(scrollX);
+ 
     if (bBox_1 == false) {
-        canvse.drawImage(box_1_img, box_1_x-scrollX*3.13, box_1_y, 50, 50);
-    }
-    if (bBox_1 == true) {
+        if(420<=box_1_y&&box_1_y<=440){
+            box_1_y +=10;
 
-        if (box_1_y <= 350) {
-            box_1_y += 1;
-            console.log(box_1_y);
         }
-        if (box_1_y == 360) {
-            bBox_1 = false;
-            console.log(box_1_y);
-        }
-        canvse.drawImage(box_1_img, box_1_x-scrollX*3.13, box_1_y, 50, 50);
     }
+    if(bBox_1==true&&mario_y==450&&scrollX==195||bBox_1==true&&mario_y==450&&scrollX==210){
+        box_1_y -=30;
+        bBox_1=false;
+    }
+   
+    canvse.drawImage(box_1_img, box_1_x - scrollX * 3.13, box_1_y, 50, 50);
 
 
 }
@@ -316,14 +295,14 @@ function stopTimer() {
 function backgroundImage() {
     // console.log("backgroundImage()호출")
     if (0 <= scrollX && scrollX < BACKGROUND_WIDTH) {
-        console.log(scrollX)
+
         canvse.drawImage(background_image, scrollX, scrollY, 256, 240, 0, 0, GAMEPAN_WIDTH, GAMEPAN_HEIGHT);
     } else if (scrollX >= BACKGROUND_WIDTH) {
-        console.log(scrollX)
+
         // bBackground_x=true;
         canvse.drawImage(background_image, BACKGROUND_WIDTH, scrollY, 256, 240, 0, 0, GAMEPAN_WIDTH, GAMEPAN_HEIGHT);
     } else if (scrollX < 0) {
-        console.log(scrollX)
+
         // bBackground_x=true;
         canvse.drawImage(background_image, 0, scrollY, 256, 240, 0, 0, GAMEPAN_WIDTH, GAMEPAN_HEIGHT);
 
