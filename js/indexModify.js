@@ -59,11 +59,9 @@ let bBackground_x = false;
 
 
 //동작 여부
-let bMove = false;
-let bLR = false;
-let bJump = false;
-
-
+let bMove = false; //움직임
+let bLR = false; //좌우방향
+let bJump = false; //점프여부
 
 //js 초기화
 window.onload = function () {
@@ -105,7 +103,7 @@ function startGameTimer() {
 function startTimer() {
 
     if (timer == null) {
-        timer = setInterval(timerProc, 1000 / 60)
+        timer = setInterval(timerProc, 1000 / 24)
     }
 }
 
@@ -124,9 +122,11 @@ function timerProc() {
 
 // 마리오 스프라이트를 변수로 변환    
 function walkL1() { canvse.drawImage(mario_img, mario_x, mario_y, mario_w, mario_h) }; //왼쪽 걷는 그림 1
-function walkL2() { canvse.drawImage(mario_img2, mario_x, mario_y, mario_w, mario_h) }; //왼쪽 걷는 그림 2 = 왼쪽 점프
+function walkL2() { canvse.drawImage(mario_img2, mario_x, mario_y, mario_w, mario_h) }; //왼쪽 걷는 그림 2
 function walkR1() { canvse.drawImage(mario_L_img, mario_x, mario_y, mario_w, mario_h) }; //오른쪽 걷는 그림 1
-function walkR2() { canvse.drawImage(mario_L_img2, mario_x, mario_y, mario_w, mario_h) }; //오른쪽 걷는 그림 2 = 오른쪽 점프
+function walkR2() { canvse.drawImage(mario_L_img2, mario_x, mario_y, mario_w, mario_h) }; //오른쪽 걷는 그림 2
+function jumpL() { canvse.drawImage(mario_img2, mario_x, mario_y, mario_w, mario_h) }; //왼쪽 점프
+function jumpR() { canvse.drawImage(mario_j_r, mario_x, mario_y, mario_w, mario_h) }; //오른쪽 점프
 
 let walkToggle = false;
 
@@ -143,92 +143,45 @@ window.onkeyup = function (event) {
 setInterval(function () {
     timerProc();
     //마리오 이동
-    if (keyState["ArrowRight"] && keyState["KeyZ"]) {
-        // mario_x += 15;
-        if (bMove == false) {
-            bMove = true;
-            bLR = false;
-            walkToggle = !walkToggle;
-            if (mario_y < MARIO_Y_INITIAL + 1) {
-                console.log(mario_y);
-                if (mario_y == MARIO_Y_INITIAL) {
-                    console.log(mario_y);
-                    // mario_y -= 300;
-                    console.log(mario_y);
-                    bJump = true;
-                }// 대각선 점프
-            } else {
-                walkL1();
-                bMove = false;
-                bLR = false;
-                bJump = false;
-            } // 우점프
-        } else if (keyState["ArrowLeft"] && keyState["KeyZ"]) {
-            // mario_x -= 15;
-            if (bMove == false) {
-                bMove = true;
-                bLR = true;
-                walkR2();
+    if (keyState["ArrowRight"]) {
+        if (mario_x < GAMEPAN_WIDTH / 2){
+            mario_x += 10;
+        } else if (scrollX< BACKGROUND_WIDTH - GAMEPAN_WIDTH) {
+            scrollX += 10;
+        }
+        bMove = true;
+        bLR = false;
+        walkToggle = !walkToggle;      
+    } // 오른쪽 이동
+    else if (keyState["ArrowLeft"]) {
+        if (keyState["ArrowRight"]) {
+            mario_x -= 10;
+        } else if (mario_x > GAMEPAN_WIDTH / 2) {
+            scrollX += 10;
+        }
+        bMove = true;
+        bLR = true;
+        walkToggle = !walkToggle;
+    } // 왼쪽이동 
+    else {
+        bMove = false;
+    } // 움직이지 않음
 
-                if (mario_y < MARIO_Y_INITIAL + 1) {
-                    console.log(mario_y);
-                    if (mario_y == MARIO_Y_INITIAL) {
-                        console.log(mario_y);
-                        // mario_y -= 300;
-                        console.log(mario_y);
-                        bJump = true;
-                    }//대각선 점프
-                } else {
-                    walkR1();
-                    bMove = false;
-                    bLR = false;
-                    bJump = false;
-                }
-            }// 좌점프
-        }
+    if (keyState["KeyZ"] && mario_y === MARIO_Y_INITIAL) {
+        bJump = true;
+    } // 점프키 Z를 누르면 점프 시작
 
-        if (keyState["ArrowLeft"]) {
-            // mario_x -= 15;
-            if (bMove == false) {
-                bMove = true;
-                bLR = true;
-                walkL2();
-            } else {
-                bMove = false;
-                bLR = true;
-                walkL1();
-            }
+    if (bJump) {
+        mario_y -= 10;
+        if (mario_y <= MARIO_Y_INITIAL - 250) {
+            bJump = false;
         }
-        if (keyState["ArrowLeft"]) {
-            // mario_x -= 15;
-            if (bMove == false) {
-                bMove = true;
-                bLR = true;
-                walkR2();
-            } else {
-                bMove = false;
-                bLR = true;
-                walkR1();
-            }
-        }
-        if (keyState["KeyZ"]) {
-            if (mario_y < MARIO_Y_INITIAL + 1) {
-                console.log(mario_y);
-                if (mario_y == MARIO_Y_INITIAL) {
-                    console.log(mario_y);
-                    // mario_y -= 300;
-                    console.log(mario_y);
-                    bJump = true;
-                    if(bLR = true){
-                        walkR2();
-                    } else {
-                        walkL2();
-                    }
-                }
-            }
-        }
-    };// end: onkeydown
-    //end : 마리오 이동
+    } else if (mario_y < MARIO_Y_INITIAL) {
+        mario_y += 5;
+        if (mario_y > MARIO_Y_INITIAL) mario_y = MARIO_Y_INITIAL;
+    } // 점프 중일 때 Y좌표 조정, 바닥에 닿으면 초기화
+      // end: onkeydown
+      //end : 마리오 이동
 
     //상자 좌표
     console.log(`bBox_1:${bBox_1}`);
@@ -244,22 +197,22 @@ setInterval(function () {
 
     //스크린 좌표
     if (bBackground_x == false && 0 <= scrollX && scrollX < BACKGROUND_WIDTH) {
-        if (keyState["ArrowRight"]) { scrollX += 15; }
-        if (keyState["ArrowLeft"]) { scrollX -= 15; }
+        if (keyState["ArrowRight"]) { scrollX += 10; }
+        if (keyState["ArrowLeft"]) { scrollX -= 10; }
     }
     //왼쪽 끝에 닿으면 멈춤
-    if (scrollX == -15) {
-        if (keyState["ArrowRight"]) { scrollX += 15; }
+    if (scrollX == -10) {
+        if (keyState["ArrowRight"]) { scrollX += 10; }
     }
     //오른쪽 끝에 닿으면 멈춤
     if (scrollX == BACKGROUND_WIDTH) {
-        if (keyState["ArrowLeft"]) { scrollX -= 15; }
+        if (keyState["ArrowLeft"]) { scrollX -= 10; }
     }
     // if (event.code=="ArrowDown") scrollY += 5;
     // if (event.code=="ArrowUp") scrollY -= 5;
     //end : 스크린 좌표
 
-}, 1000 / 12)
+}, 1000 / 24)
 
 //--------------------------------------------
 
@@ -280,23 +233,29 @@ function drawCharacter() {
 
     // canvse.drawImage(gbw_2_img,200,200,50,50)
 
-    if (bMove == false && bLR == false && bJump == false) {
-        //오른쪽 멈춰있는 마리오
-        walkL1();
-    }
-    else if (bMove == true && bJump == false && bLR == false) {
-        //오른쪽 움직이는 마리오
-        walkL2();
-    }
 
-
-    else if (bMove == false && bLR == true && bJump == false) {
-        //왼쪽 멈춰있는 마리오
-        walkR1();
+    //마리오 이미지 그리기
+    if (bJump) {
+        if (bLR) {
+            jumpL();
+        } else {
+            jumpR();
+        }
+    } else if (bMove) {
+        if (bLR) {
+            walkToggle ? walkR2() : walkR1();
+        } else {
+            walkToggle ? walkL2() : walkL1();
+        }
+    } else {
+        if (bLR) {
+            walkR1();
+        } else {
+            walkL1();
+        }
     }
-    else if (bMove == true && bLR == true && bJump == false) {
-        //왼쪽 움직이는 마리오
-        walkR2();
+    if (mario_x < GAMEPAN_WIDTH / 2) {
+        scrollX = mario_x - GAMEPAN_WIDTH / 2;
     }
 
 
