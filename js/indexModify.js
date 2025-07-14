@@ -114,8 +114,7 @@ function timerProc() {
     //캐릭터 그리기호출
     backgroundImage();
     drawCharacter();
-
-
+    drawBox();
 
 }
 //--------------------------------------------
@@ -125,7 +124,7 @@ function walkL1() { canvse.drawImage(mario_img, mario_x, mario_y, mario_w, mario
 function walkL2() { canvse.drawImage(mario_img2, mario_x, mario_y, mario_w, mario_h) }; //왼쪽 걷는 그림 2
 function walkR1() { canvse.drawImage(mario_L_img, mario_x, mario_y, mario_w, mario_h) }; //오른쪽 걷는 그림 1
 function walkR2() { canvse.drawImage(mario_L_img2, mario_x, mario_y, mario_w, mario_h) }; //오른쪽 걷는 그림 2
-function jumpL() { canvse.drawImage(mario_img2, mario_x, mario_y, mario_w, mario_h) }; //왼쪽 점프
+function jumpL() { canvse.drawImage(mario_j_l, mario_x, mario_y, mario_w, mario_h) }; //왼쪽 점프
 function jumpR() { canvse.drawImage(mario_j_r, mario_x, mario_y, mario_w, mario_h) }; //오른쪽 점프
 
 let walkToggle = false;
@@ -154,10 +153,10 @@ setInterval(function () {
         walkToggle = !walkToggle;      
     } // 오른쪽 이동
     else if (keyState["ArrowLeft"]) {
-        if (keyState["ArrowRight"]) {
+        if (mario_x > 0 && scrollX <= 0) {
             mario_x -= 10;
-        } else if (mario_x > GAMEPAN_WIDTH / 2) {
-            scrollX += 10;
+        } else if (scrollX < 0) {
+            scrollX -= 10;
         }
         bMove = true;
         bLR = true;
@@ -167,7 +166,7 @@ setInterval(function () {
         bMove = false;
     } // 움직이지 않음
 
-    if (keyState["KeyZ"] && mario_y === MARIO_Y_INITIAL) {
+    if (keyState["Space"] && mario_y === MARIO_Y_INITIAL) {
         bJump = true;
     } // 점프키 Z를 누르면 점프 시작
 
@@ -181,7 +180,7 @@ setInterval(function () {
         if (mario_y > MARIO_Y_INITIAL) mario_y = MARIO_Y_INITIAL;
     } // 점프 중일 때 Y좌표 조정, 바닥에 닿으면 초기화
       // end: onkeydown
-      //end : 마리오 이동
+        //end : 마리오 이동
 
     //상자 좌표
     console.log(`bBox_1:${bBox_1}`);
@@ -197,10 +196,10 @@ setInterval(function () {
 
     //스크린 좌표
     if (bBackground_x == false && 0 <= scrollX && scrollX < BACKGROUND_WIDTH) {
-        if (keyState["ArrowRight"]) { scrollX += 10; }
+    //     if (keyState["ArrowRight"]) { scrollX += 10; }
         if (keyState["ArrowLeft"]) { scrollX -= 10; }
     }
-    //왼쪽 끝에 닿으면 멈춤
+    //왼쪽 끝에 닿으면 멈춤 
     if (scrollX == -10) {
         if (keyState["ArrowRight"]) { scrollX += 10; }
     }
@@ -213,9 +212,6 @@ setInterval(function () {
     //end : 스크린 좌표
 
 }, 1000 / 24)
-
-//--------------------------------------------
-
 
 
 //--------------------------------------------
@@ -237,13 +233,17 @@ function drawCharacter() {
     //마리오 이미지 그리기
     if (bJump) {
         if (bLR) {
+            drawCharacterDelete();
+            backgroundImage();
             jumpL();
         } else {
+            drawCharacterDelete();
+            backgroundImage();
             jumpR();
         }
     } else if (bMove) {
         if (bLR) {
-            walkToggle ? walkR2() : walkR1();
+            walkToggle ? walkR2() : walkR1();            
         } else {
             walkToggle ? walkL2() : walkL1();
         }
@@ -270,8 +270,6 @@ function drawCharacter() {
         }
     }
 
-
-
     //점프했을때 마리오
     if (bJump == true && bLR == false) {
 
@@ -288,8 +286,9 @@ function drawCharacter() {
         }
     }
 
+}
 
-
+function drawBox(){
     //상자 이미지
     if (bBox_1 == false) {
         canvse.drawImage(box_1_img, box_1_x - scrollX * 3.13, box_1_y, 50, 50);
@@ -306,13 +305,19 @@ function drawCharacter() {
         }
         canvse.drawImage(box_1_img, box_1_x - scrollX * 3.13, box_1_y, 50, 50);
     }
-
-
 }
+
+
 //캐릭터지우기
 function drawCharacterDelete() {
+    canvse.clearRect(50, 50, mario_x, mario_y);
+}
+
+//화면 초기화
+function drawAllDelete() {
     canvse.clearRect(0, 0, GAMEPAN_WIDTH, GAMEPAN_HEIGHT);
 }
+
 
 
 //-------------------------------------------
@@ -322,7 +327,7 @@ function stopTimer() {
     // console.log("stopTimer()호출")
     clearInterval(timer);
     timer = null;
-    drawCharacterDelete();
+    drawAllDelete();
 }
 
 //배경그리기
@@ -339,7 +344,6 @@ function backgroundImage() {
         console.log(scrollX)
         // bBackground_x=true;
         canvse.drawImage(background_image, 0, scrollY, 256, 240, 0, 0, GAMEPAN_WIDTH, GAMEPAN_HEIGHT);
-
     }
 }
 //--------------------------------------------
