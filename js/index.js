@@ -127,8 +127,18 @@ function timerProc() {
 //--------------------------------------------
 
 window.onkeydown = function (event) {
-    //마리오 이동
     console.log(event.code);
+
+    //시작버튼
+    if(event.code=="KeyZ"){
+        startGameTimer();
+    }
+    //종료버튼
+    if(event.code=="KeyX"){
+        stopTimer();
+    }
+
+    //마리오 이동
     if (event.code == "ArrowRight") {
         // mario_x += 15;
         if (bMove == false) {
